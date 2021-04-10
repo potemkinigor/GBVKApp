@@ -29,6 +29,8 @@ class FriendsListViewController: UIViewController {
     let photoCache = PhotoCache.shared
     let realmManager = RealmManager.shared
     
+    var token: NotificationToken?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -40,6 +42,10 @@ class FriendsListViewController: UIViewController {
         
         alphabetFrindsSearch.addTarget(self, action: #selector(changeActiveSections), for: .valueChanged)
    
+    }
+    
+    deinit {
+        self.token?.invalidate()
     }
     
     //MARK: - Private functions
@@ -92,6 +98,8 @@ class FriendsListViewController: UIViewController {
         
         let friendsRealm: Results<User>? = realmManager?.getObjects()
         
+        subscribeForFriendsRealmUpdate(friends: friendsRealm)
+        
         friendsRealm!.forEach { (user) in
             friends.append(user)
         }
@@ -133,6 +141,53 @@ class FriendsListViewController: UIViewController {
         let newArray = friendsList.sorted(by: { $0.surname < $1.surname })
         
         return newArray
+    }
+    
+    func subscribeForFriendsRealmUpdate(friends: Results<User>?) {
+        self.token = friends?.observe({ [self] (changes) in
+            switch changes {
+            case .initial(let friends):
+                print("Initial list: \(friends)")
+            case .update(let friends, deletions: let deletions, insertions: let insertions, modifications: let modifications):
+                
+                self.tableView.beginUpdates()
+                
+                var deletionsIndexPath: [IndexPath] = []
+                var insertionsIndexPath: [IndexPath] = []
+                var modificationsIndexPath: [IndexPath] = []
+                
+                for section in 0..<self.presentedListOfFriends.count {
+                    for row in 0..<self.presentedListOfFriends[section].count {
+                        deletions.forEach { (friendIndex) in
+                            if friends[friendIndex].id == presentedListOfFriends[section][row].id {
+                                deletionsIndexPath.append(IndexPath(row: section, section: row))
+                            }
+                        }
+                        
+                        insertions.forEach { (friendIndex) in
+                            if friends[friendIndex].id == presentedListOfFriends[section][row].id {
+                                insertionsIndexPath.append(IndexPath(row: section, section: row))
+                            }
+                        }
+                        
+                        modifications.forEach { (friendIndex) in
+                            if friends[friendIndex].id == presentedListOfFriends[section][row].id {
+                                modificationsIndexPath.append(IndexPath(row: section, section: row))
+                            }
+                        }
+                    }
+                }
+                
+                self.tableView.deleteRows(at: deletionsIndexPath, with: .automatic)
+                self.tableView.insertRows(at: insertionsIndexPath, with: .automatic)
+                self.tableView.reloadRows(at: modificationsIndexPath, with: .automatic)
+                
+                self.tableView.endUpdates()
+                
+            case .error(let error):
+                print(error.localizedDescription)
+            }
+        })
     }
 
 }

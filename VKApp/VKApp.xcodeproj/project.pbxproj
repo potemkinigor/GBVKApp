@@ -51,6 +51,8 @@
 		CE7DE1FD25D3D8E80023C1F1 /* AlphabetFriendsSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7DE1FC25D3D8E80023C1F1 /* AlphabetFriendsSearch.swift */; };
 		CE84876E261309A800CE0775 /* PhotoCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE84876D261309A800CE0775 /* PhotoCache.swift */; };
 		CEA53BE4261CC3C8001EFF06 /* RealmManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA53BE3261CC3C8001EFF06 /* RealmManager.swift */; };
+		CEB2A9F2262724FF00C35A1E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = CEB2A9F1262724FF00C35A1E /* GoogleService-Info.plist */; };
+		CEB2AA04262726DE00C35A1E /* FirebaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEB2AA03262726DE00C35A1E /* FirebaseManager.swift */; };
 		CED0D17625D405E8004DFCDF /* FriendsUITableViewHeaderFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CED0D17525D405E8004DFCDF /* FriendsUITableViewHeaderFooterView.swift */; };
 		CED0D17E25D40BE5004DFCDF /* FriendsUITableViewHeaderFooterView.xib in Resources */ = {isa = PBXBuildFile; fileRef = CED0D17D25D40BE5004DFCDF /* FriendsUITableViewHeaderFooterView.xib */; };
 		CEEEDD842609B95E0051D393 /* ListOfFriends.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEEEDD832609B95E0051D393 /* ListOfFriends.swift */; };
@@ -107,6 +109,8 @@
 		CE7DE1FC25D3D8E80023C1F1 /* AlphabetFriendsSearch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlphabetFriendsSearch.swift; sourceTree = "<group>"; };
 		CE84876D261309A800CE0775 /* PhotoCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCache.swift; sourceTree = "<group>"; };
 		CEA53BE3261CC3C8001EFF06 /* RealmManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmManager.swift; sourceTree = "<group>"; };
+		CEB2A9F1262724FF00C35A1E /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		CEB2AA03262726DE00C35A1E /* FirebaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseManager.swift; sourceTree = "<group>"; };
 		CED0D17525D405E8004DFCDF /* FriendsUITableViewHeaderFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsUITableViewHeaderFooterView.swift; sourceTree = "<group>"; };
 		CED0D17D25D40BE5004DFCDF /* FriendsUITableViewHeaderFooterView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FriendsUITableViewHeaderFooterView.xib; sourceTree = "<group>"; };
 		CEEEDD832609B95E0051D393 /* ListOfFriends.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListOfFriends.swift; sourceTree = "<group>"; };
@@ -166,6 +170,7 @@
 				CE96F681261B09A3004B1EBA /* Services */,
 				83B992E225BC217A00EFAC50 /* AppDelegate.swift */,
 				83B992EB25BC218200EFAC50 /* Assets.xcassets */,
+				CEB2A9F1262724FF00C35A1E /* GoogleService-Info.plist */,
 				83B992F025BC218200EFAC50 /* Info.plist */,
 			);
 			path = VKApp;
@@ -349,6 +354,7 @@
 			children = (
 				CE25CBA9260715F500067AA0 /* Network manager */,
 				CEA53BE3261CC3C8001EFF06 /* RealmManager.swift */,
+				CEB2AA03262726DE00C35A1E /* FirebaseManager.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -439,6 +445,7 @@
 				83B992EC25BC218200EFAC50 /* Assets.xcassets in Resources */,
 				CE7C751D25C7FE0100955EBF /* GroupsTableViewCell.xib in Resources */,
 				83B992EA25BC217A00EFAC50 /* Main.storyboard in Resources */,
+				CEB2A9F2262724FF00C35A1E /* GoogleService-Info.plist in Resources */,
 				CE7DAC3425D7E20C006407C8 /* ImageCollectionViewCell.xib in Resources */,
 				CE7C74EE25C7E41100955EBF /* FriendsTableViewCell.xib in Resources */,
 			);
@@ -505,6 +512,7 @@
 				CE1C2B1225D54D7A00605FA6 /* NewsPost.swift in Sources */,
 				CE68CF8B25E63F6300637708 /* NavigationControllerAnimationPush.swift in Sources */,
 				CE1C2B0425D5449100605FA6 /* PostCollectionViewCell.swift in Sources */,
+				CEB2AA04262726DE00C35A1E /* FirebaseManager.swift in Sources */,
 				CED0D17625D405E8004DFCDF /* FriendsUITableViewHeaderFooterView.swift in Sources */,
 				CE68CF8025E635BD00637708 /* ViewControllerTransitionDelegate.swift in Sources */,
 				CE14BCA225D12B5200C5F127 /* GroupsAvatarView.swift in Sources */,

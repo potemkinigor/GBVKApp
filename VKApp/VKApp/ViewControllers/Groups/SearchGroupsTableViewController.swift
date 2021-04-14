@@ -12,6 +12,7 @@ class SearchGroupsTableViewController: UITableViewController {
     @IBOutlet weak var groupsSearchBar: UISearchBar!
     let networkManager = Session.shared
     let photoCache = PhotoCache.shared
+    let firebaseManager = FirebaseManager.shared
     
     var groups: [Group] = []
     
@@ -76,6 +77,7 @@ extension SearchGroupsTableViewController: UISearchBarDelegate {
                 
                 DispatchQueue.main.async {
                     self.tableView.reloadData()
+                    self.firebaseManager.saveSearchNameGroupsToFirestore(results: searchText)
                 }
             }
         }

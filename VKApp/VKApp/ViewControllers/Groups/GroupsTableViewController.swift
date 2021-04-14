@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import RealmSwift
 
 class GroupsTableViewController: UITableViewController {
 
@@ -13,13 +14,20 @@ class GroupsTableViewController: UITableViewController {
     let photoCache = PhotoCache.shared
     let realmManager = RealmManager.shared
     var userGroups: [Group] = []
+    
+    var token: NotificationToken?
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
         loadListOfGroupsFromNetwork()
+        updateView()
         
         tableView.register(UINib(nibName: "GroupsTableViewCell", bundle: nil), forCellReuseIdentifier: "groupsCell")
+    }
+    
+    deinit {
+        self.token?.invalidate()
     }
     
     //MARK: - Private functions
@@ -36,10 +44,41 @@ class GroupsTableViewController: UITableViewController {
             
             DispatchQueue.main.async {
                 try? self?.realmManager?.add(objects: userGroups)
-                self?.tableView.reloadData()
             }
         }
+    }
     
+    func updateView() {
+        let userGroups: Results<Group>? = realmManager?.getObjects()
+        
+        userGroups?.forEach({ (group) in
+            self.userGroups.append(group)
+        })
+        
+        self.token = userGroups?.observe({ (changes) in
+            switch changes {
+            case .initial(let groups):
+                print("Initial groups: \(groups)")
+            case .update(_, deletions: let deletions, insertions: let insertions, modifications: let modifications):
+                
+                self.tableView.beginUpdates()
+                
+                let deletionsIndexPath = deletions.map { IndexPath(row: $0, section: 0) }
+                let insertionsIndexPath = insertions.map { IndexPath(row: $0, section: 0) }
+                let modificationsIndexPath = modifications.map { IndexPath(row: $0, section: 0) }
+                
+                self.tableView.deleteRows(at: deletionsIndexPath, with: .automatic)
+                self.tableView.insertRows(at: insertionsIndexPath, with: .automatic)
+                self.tableView.reloadRows(at: modificationsIndexPath, with: .automatic)
+                
+                self.tableView.endUpdates()
+                
+            case .error(let error):
+                print(error.localizedDescription)
+            }
+        })
+        
+        
     }
 
     @IBAction func searchGroups(_ sender: Any) {

@@ -7,5 +7,7 @@ target 'VKApp' do
 
   pod 'Alamofire', '~> 5.0.0-rc.2'
   pod 'RealmSwift'
+  pod 'Firebase/Analytics'
+  pod 'Firebase/Firestore'
 
 end

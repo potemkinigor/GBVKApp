@@ -28,6 +28,7 @@ class FriendsListViewController: UIViewController {
     let networkManager = Session.shared
     let photoCache = PhotoCache.shared
     let realmManager = RealmManager.shared
+    let firebaseManager = FirebaseManager.shared
     
     var token: NotificationToken?
     
@@ -41,6 +42,8 @@ class FriendsListViewController: UIViewController {
         tableView.register(UINib(nibName: "FriendsUITableViewHeaderFooterView", bundle: nil), forHeaderFooterViewReuseIdentifier: "friendsListHeader")
         
         alphabetFrindsSearch.addTarget(self, action: #selector(changeActiveSections), for: .valueChanged)
+        
+        firebaseManager.saveLoginDateToFirestore()
    
     }
     

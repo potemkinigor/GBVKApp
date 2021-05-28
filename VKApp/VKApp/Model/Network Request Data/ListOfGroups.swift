@@ -8,13 +8,13 @@
 import Foundation
 
 struct ListOfGroups: Codable {
-    let response: ListOfGroupsResponse?
+    let response: ListOfGroupsResponse
 }
 
 // MARK: - Response
 struct ListOfGroupsResponse: Codable {
     let count: Int?
-    let items: [ListOfGroupsItem]?
+    let items: [ListOfGroupsItem]
 }
 
 // MARK: - Item

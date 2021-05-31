@@ -8,6 +8,7 @@
 import UIKit
 import Foundation
 import RealmSwift
+import Alamofire
 
 enum TypeOfPresentation {
     case showAll
@@ -26,10 +27,10 @@ class FriendsListViewController: UIViewController {
     var delegate: PassFriendInforamtionDelegate?
     
     let networkManager = Session.shared
-    let photoCache = PhotoCache.shared
     let realmManager = RealmManager.shared
     
     var token: NotificationToken?
+    var photoService: PhotoService?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,11 +38,11 @@ class FriendsListViewController: UIViewController {
         prepareListOfFriendsToPresent(typeOfPresentation: .showAll)
         
         tableView.register(UINib(nibName: "FriendsTableViewCell", bundle: nil), forCellReuseIdentifier: "friendsReuseIdentifier")
-        
         tableView.register(UINib(nibName: "FriendsUITableViewHeaderFooterView", bundle: nil), forHeaderFooterViewReuseIdentifier: "friendsListHeader")
         
         alphabetFrindsSearch.addTarget(self, action: #selector(changeActiveSections), for: .valueChanged)
-   
+        
+        self.photoService = PhotoService(container: self.tableView)
     }
     
     deinit {
@@ -71,19 +72,52 @@ class FriendsListViewController: UIViewController {
     
     func loadListOfFriendsFromNetwork () {
         
-        var friends: [User] = []
-            
-        self.networkManager.loadUserFriends { [weak self] (friendsList) in
-            friendsList.response?.items!.forEach({ (friend) in
-                friends.append(User(id: friend.id!, name: friend.firstName!, surname: friend.lastName!, avatarURL: friend.photoURL!))
-            })
+        let baseURL = "https://api.vk.com"
+        let path = "/method/friends.get"
+        
+        let parameters: Parameters = [
+            "access_token" : self.token!,
+            "order" : "random",
+            "fields" : "first_name, first_name, photo_200_orig",
+            "v" : "5.130"
+        ]
+        
+        let opq = OperationQueue()
 
-            DispatchQueue.main.async {
-                try? self?.realmManager?.add(objects: friends)
-                
-                self?.prepareListOfFriendsToPresent(typeOfPresentation: .showAll)
-            }
-        }
+        let request = AF.request(baseURL + path, method: .get, parameters: parameters)
+        let getDataOperation = FriendsGetDataOperations(request: request)
+        opq.addOperation(getDataOperation)
+        
+        let parseData = FriendsParseDataOperation()
+        parseData.addDependency(getDataOperation)
+        opq.addOperation(parseData)
+        
+        let prepareForRealm = FriendsPrepareForRealmOperation()
+        prepareForRealm.addDependency(parseData)
+        
+        let addFriendsToRealm = FriendsAddToRealmOperation()
+        addFriendsToRealm.addDependency(prepareForRealm)
+        
+        OperationQueue.main.addOperation(addFriendsToRealm)
+        
+        prepareListOfFriendsToPresent(typeOfPresentation: .showAll)
+        
+        
+        //MARK: - Old approach
+        
+//        var friends: [User] = []
+//
+//        self.networkManager.loadUserFriends { [weak self] (friendsList) in
+//            friendsList.response?.items!.forEach({ (friend) in
+//                friends.append(User(id: friend.id!, name: friend.firstName!, surname: friend.lastName!, avatarURL: friend.photoURL!))
+//            })
+//
+//            DispatchQueue.main.async {
+//                try? self?.realmManager?.add(objects: friends)
+//
+//                self?.prepareListOfFriendsToPresent(typeOfPresentation: .showAll)
+//            }
+//        }
     }
     
     private func prepareListOfFriendsToPresent(typeOfPresentation: TypeOfPresentation, searchText: String = "") {
@@ -212,7 +246,7 @@ extension FriendsListViewController: UITableViewDataSource, UITableViewDelegate 
         
         cell.userName.text = presentedListOfFriends[indexPath.section][indexPath.row].name + " " + presentedListOfFriends[indexPath.section][indexPath.row].surname
         
-        let image = photoCache.cachedPhotoDictionary[presentedListOfFriends[indexPath.section][indexPath.row].avatarURL]
+        let image = photoService?.photo(atIndexpath: indexPath, byUrl: presentedListOfFriends[indexPath.section][indexPath.row].avatarURL)
         
         if image != nil {
             cell.userAvatarView.avatarImage.image = image

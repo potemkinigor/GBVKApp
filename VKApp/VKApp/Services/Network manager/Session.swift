@@ -7,6 +7,7 @@
 
 import Foundation
 import Alamofire
+import PromiseKit
 
 class Session {
     
@@ -20,26 +21,9 @@ class Session {
         
     }
     
-    //MARK: - Private functions
-    
-    private func loadPhotoWithURL (photoURL: String) {
-        
-        if photoCache.cachedPhotoDictionary[photoURL] == nil {
-            guard let url = URL(string: photoURL),
-                  let data = try? Data(contentsOf: url),
-                  let image = UIImage(data: data) else { return }
-            
-            photoCache.cachedPhotoDictionary[photoURL] = image
-        } else {
-            return
-        }
-    }
-    
     //MARK: - Groups
     
-    func loadUserGroups(complition: @escaping (ListOfGroups) -> Void) {
-        
-        var listOfGroups: ListOfGroups!
+    func loadUserGroups(on queue: DispatchQueue = .main) -> Promise<[ListOfGroupsItem]> {
         
         let baseURL = "https://api.vk.com"
         let path = "/method/groups.get"
@@ -50,21 +34,20 @@ class Session {
             "v" : "5.130"
         ]
         
-        AF.request(baseURL + path, method: .get, parameters: parameters)
-            .responseData(completionHandler: { (data) in
-                guard let data = data.value else { return }
-                do {
-                    listOfGroups = try JSONDecoder().decode(ListOfGroups.self, from: data)
-                } catch {
-                    print(error.localizedDescription)
-                }
-                
-                listOfGroups.response?.items?.forEach({ (group) in
-                    self.loadPhotoWithURL(photoURL: group.photo200URL!)
+        let promise = Promise<[ListOfGroupsItem]> { resolver in
+            AF.request(baseURL + path, method: .get, parameters: parameters)
+                .responseData(completionHandler: { (data) in
+                    guard let data = data.value else { return }
+                    do {
+                        let listOfGroups = try JSONDecoder().decode(ListOfGroups.self, from: data)
+                        resolver.fulfill(listOfGroups.response.items)
+                    } catch {
+                        print(error.localizedDescription)
+                    }
                 })
-                
-                complition(listOfGroups)
-            })
+        }
+        
+        return promise
     }
     
     func loadFilteredGroups(filterText: String, complition: @escaping (ListOfGroups) -> Void) {
@@ -90,7 +73,7 @@ class Session {
                     print(error.localizedDescription)
                 }
                 
-                listOfGroups.response?.items?.forEach({ (group) in
+                listOfGroups.response.items.forEach({ (group) in
                     self.loadPhotoWithURL(photoURL: group.photo200URL!)
                 })
                 
@@ -165,5 +148,60 @@ class Session {
                 completion(listOfPhotosArray)
             })
     }
+    
+    //MARK: - News
+    
+    func getNewsPosts (completion: @escaping (Data) -> Void) {
+        
+        let baseURL = "https://api.vk.com"
+        let path = "/method/newsfeed.get"
+        
+        let parameters: Parameters = [
+            "access_token" : self.token!,
+            "filters" : "post",
+            "v" : "5.130"
+        ]
+        
+        AF.request(baseURL + path, method: .get, parameters: parameters)
+            .responseData(completionHandler: { (data) in
+                guard let data = data.value else { return }
+                completion(data)
+            })
+    }
+    
+    func getNewsPhoto (completion: @escaping (Data) -> Void) {
+        
+        let baseURL = "https://api.vk.com"
+        let path = "/method/newsfeed.get"
+        
+        let parameters: Parameters = [
+            "access_token" : self.token!,
+            "filters" : "post",
+            "v" : "5.130"
+        ]
+        
+        AF.request(baseURL + path, method: .get, parameters: parameters)
+            .responseData(completionHandler: { (data) in
+                guard let data = data.value else { return }
+                completion(data)
+            })
+    }
+    
+    
+    //MARK: - Private functions
+    
+    func loadPhotoWithURL (photoURL: String) {
+        
+        if photoCache.cachedPhotoDictionary[photoURL] == nil {
+            guard let url = URL(string: photoURL),
+                  let data = try? Data(contentsOf: url),
+                  let image = UIImage(data: data) else { return }
+            
+            photoCache.cachedPhotoDictionary[photoURL] = image
+        } else {
+            return
+        }
+    }
+    
     
 }

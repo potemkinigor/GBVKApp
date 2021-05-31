@@ -7,15 +7,25 @@
 
 import UIKit
 import RealmSwift
+import PromiseKit
 
 class GroupsTableViewController: UITableViewController {
+    
+    @IBAction func searchGroups(_ sender: Any) {
+        
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let vc = storyboard.instantiateViewController(identifier: "searchGroups")
+        vc.modalPresentationStyle = .fullScreen
+
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
 
     let networkManager = Session.shared
-    let photoCache = PhotoCache.shared
     let realmManager = RealmManager.shared
     var userGroups: [Group] = []
     
     var token: NotificationToken?
+    private var photoManager: PhotoService?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,7 +33,14 @@ class GroupsTableViewController: UITableViewController {
         loadListOfGroupsFromNetwork()
         updateView()
         
+        self.photoManager = PhotoService(container: self.tableView)
+        
         tableView.register(UINib(nibName: "GroupsTableViewCell", bundle: nil), forCellReuseIdentifier: "groupsCell")
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        loadListOfGroupsFromNetwork ()
     }
     
     deinit {
@@ -33,19 +50,32 @@ class GroupsTableViewController: UITableViewController {
     //MARK: - Private functions
     
     private func loadListOfGroupsFromNetwork () {
-        
-        let userGroups: [Group] = []
-        
-        self.networkManager.loadUserGroups { [weak self] (listOfGroups) in
-            listOfGroups.response?.items?.forEach({ (groups) in
-                let group = Group(id: groups.id!, name: groups.name!, avatarURL: groups.photo200URL!, userIn: (groups.isMember! != 0))
-                self?.userGroups.append(group)
+        networkManager.loadUserGroups(on: .global())
+            .thenMap({[weak self] listOfGroupsItem -> Promise<Group> in
+                self?.networkManager.loadPhotoWithURL(photoURL: listOfGroupsItem.photo200URL!)
+                let promise = self?.convertResponseGroup(group: listOfGroupsItem)
+                return promise!
             })
-            
-            DispatchQueue.main.async {
-                try? self?.realmManager?.add(objects: userGroups)
+            .done(on: .global()){[weak self] groups in
+                self?.userGroups = groups
+                self?.saveGroupsToRealm(groups: groups)
+                self?.updateTableView()
             }
-        }
+            .catch { error in
+                print(error.localizedDescription)
+            }
+        
+        //MARK: - Old approach
+//        self.networkManager.loadUserGroups { [weak self] (listOfGroups) in
+//            listOfGroups.response?.items?.forEach({ (groups) in
+//                let group = Group(id: groups.id!, name: groups.name!, avatarURL: groups.photo200URL!, userIn: (groups.isMember! != 0))
+//                self?.userGroups.append(group)
+//            })
+//
+//            DispatchQueue.main.async {
+//                try? self?.realmManager?.add(objects: userGroups)
+//            }
+//        }
     }
     
     func updateView() {
@@ -77,18 +107,20 @@ class GroupsTableViewController: UITableViewController {
                 print(error.localizedDescription)
             }
         })
-        
-        
     }
-
-    @IBAction func searchGroups(_ sender: Any) {
-        
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let vc = storyboard.instantiateViewController(identifier: "searchGroups")
-        vc.modalPresentationStyle = .fullScreen
-
-        self.navigationController?.pushViewController(vc, animated: true)
+    
+    private func saveGroupsToRealm(groups: [Group]) {
+        DispatchQueue.main.async {
+            try? self.realmManager?.add(objects: groups)
+        }
     }
+    
+    private func updateTableView() {
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+        }
+    }
+   
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -105,7 +137,7 @@ class GroupsTableViewController: UITableViewController {
         
         cell.groupNameLabel.text = userGroups[indexPath.row].name
         
-        let image = photoCache.cachedPhotoDictionary[userGroups[indexPath.row].avatarURL]
+        let image = photoManager?.photo(atIndexpath: indexPath, byUrl: userGroups[indexPath.row].avatarURL)
         
         if image != nil {
             cell.groupsAvatarView.groupAvatar.image = image
@@ -118,6 +150,31 @@ class GroupsTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+    }
+    
+    private func convertResponseGroup(group: ListOfGroupsItem) -> Promise<Group> {
+        let promise = Promise<Group> { resolver in
+            
+            guard let groupID = group.id,
+                  let groupName = group.name,
+                  let avatarURL = group.photo200URL else {
+                
+                let error = NSError()
+                resolver.reject(error)
+                return
+            }
+            
+            let userIn = (group.isMember != 0)
+            
+            let group = Group(id: groupID,
+                              name: groupName,
+                              avatarURL: avatarURL,
+                              userIn: userIn)
+            
+            resolver.fulfill(group)
+        }
+        
+        return promise
     }
     
 }

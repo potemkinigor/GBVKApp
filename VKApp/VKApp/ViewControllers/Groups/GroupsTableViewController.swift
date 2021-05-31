@@ -21,17 +21,19 @@ class GroupsTableViewController: UITableViewController {
     }
 
     let networkManager = Session.shared
-    let photoCache = PhotoCache.shared
     let realmManager = RealmManager.shared
     var userGroups: [Group] = []
     
     var token: NotificationToken?
+    private var photoManager: PhotoService?
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
         loadListOfGroupsFromNetwork()
         updateView()
+        
+        self.photoManager = PhotoService(container: self.tableView)
         
         tableView.register(UINib(nibName: "GroupsTableViewCell", bundle: nil), forCellReuseIdentifier: "groupsCell")
     }
@@ -135,7 +137,7 @@ class GroupsTableViewController: UITableViewController {
         
         cell.groupNameLabel.text = userGroups[indexPath.row].name
         
-        let image = photoCache.cachedPhotoDictionary[userGroups[indexPath.row].avatarURL]
+        let image = photoManager?.photo(atIndexpath: indexPath, byUrl: userGroups[indexPath.row].avatarURL)
         
         if image != nil {
             cell.groupsAvatarView.groupAvatar.image = image

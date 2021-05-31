@@ -27,10 +27,10 @@ class FriendsListViewController: UIViewController {
     var delegate: PassFriendInforamtionDelegate?
     
     let networkManager = Session.shared
-    let photoCache = PhotoCache.shared
     let realmManager = RealmManager.shared
     
     var token: NotificationToken?
+    var photoService: PhotoService?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,7 +41,8 @@ class FriendsListViewController: UIViewController {
         tableView.register(UINib(nibName: "FriendsUITableViewHeaderFooterView", bundle: nil), forHeaderFooterViewReuseIdentifier: "friendsListHeader")
         
         alphabetFrindsSearch.addTarget(self, action: #selector(changeActiveSections), for: .valueChanged)
-   
+        
+        self.photoService = PhotoService(container: self.tableView)
     }
     
     deinit {
@@ -245,7 +246,7 @@ extension FriendsListViewController: UITableViewDataSource, UITableViewDelegate 
         
         cell.userName.text = presentedListOfFriends[indexPath.section][indexPath.row].name + " " + presentedListOfFriends[indexPath.section][indexPath.row].surname
         
-        let image = photoCache.cachedPhotoDictionary[presentedListOfFriends[indexPath.section][indexPath.row].avatarURL]
+        let image = photoService?.photo(atIndexpath: indexPath, byUrl: presentedListOfFriends[indexPath.section][indexPath.row].avatarURL)
         
         if image != nil {
             cell.userAvatarView.avatarImage.image = image

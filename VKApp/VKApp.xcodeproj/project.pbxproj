@@ -18,6 +18,7 @@
 		CE14BCAC25D140AA00C5F127 /* LikeControlButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE14BCAB25D140AA00C5F127 /* LikeControlButton.swift */; };
 		CE1C2B0825D545F400605FA6 /* NewsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE1C2B0725D545F400605FA6 /* NewsViewController.swift */; };
 		CE1C2B1225D54D7A00605FA6 /* NewsPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE1C2B1125D54D7A00605FA6 /* NewsPost.swift */; };
+		CE24874C266537BF00934CAE /* PhotoManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE24874B266537BF00934CAE /* PhotoManager.swift */; };
 		CE25CBAB2607164A00067AA0 /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE25CBAA2607164A00067AA0 /* Session.swift */; };
 		CE25CBB226071BDD00067AA0 /* AutorizeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE25CBB126071BDD00067AA0 /* AutorizeViewController.swift */; };
 		CE25CBB626071CF300067AA0 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE25CBB526071CF300067AA0 /* WebKit.framework */; };
@@ -83,6 +84,7 @@
 		CE14BCAB25D140AA00C5F127 /* LikeControlButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeControlButton.swift; sourceTree = "<group>"; };
 		CE1C2B0725D545F400605FA6 /* NewsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsViewController.swift; sourceTree = "<group>"; };
 		CE1C2B1125D54D7A00605FA6 /* NewsPost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsPost.swift; sourceTree = "<group>"; };
+		CE24874B266537BF00934CAE /* PhotoManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoManager.swift; sourceTree = "<group>"; };
 		CE25CBAA2607164A00067AA0 /* Session.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
 		CE25CBB126071BDD00067AA0 /* AutorizeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutorizeViewController.swift; sourceTree = "<group>"; };
 		CE25CBB526071CF300067AA0 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
@@ -440,6 +442,7 @@
 			children = (
 				CE25CBA9260715F500067AA0 /* Network manager */,
 				CEA53BE3261CC3C8001EFF06 /* RealmManager.swift */,
+				CE24874B266537BF00934CAE /* PhotoManager.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -619,6 +622,7 @@
 				CEEEDD8D2609BB370051D393 /* ListOfGroups.swift in Sources */,
 				CE68CF8F25E63FC500637708 /* NavigationControllerAnimationPop.swift in Sources */,
 				CE7C750B25C7F0E300955EBF /* User.swift in Sources */,
+				CE24874C266537BF00934CAE /* PhotoManager.swift in Sources */,
 				CE5906A525E1299700CF67C2 /* FriendsPhotosCollectionViewCell.swift in Sources */,
 				CE7C751C25C7FE0100955EBF /* GroupsTableViewCell.swift in Sources */,
 				CE7C74F825C7EB0800955EBF /* GroupsTableViewController.swift in Sources */,

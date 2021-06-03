@@ -9,7 +9,12 @@ import UIKit
 
 class FriendsTableViewCell: UITableViewCell {
 
-    @IBOutlet weak var userName: UILabel!
+    @IBOutlet weak var userName: UILabel! {
+        didSet {
+            userName.isOpaque = true
+            userName.backgroundColor = Constants.Colors.appBackgroundColor
+        }
+    }
     @IBOutlet weak var userAvatarView: UserAvatarView!
     
     override func awakeFromNib() {

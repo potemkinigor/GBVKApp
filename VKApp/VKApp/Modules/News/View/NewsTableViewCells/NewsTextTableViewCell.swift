@@ -10,7 +10,12 @@ import UIKit
 class NewsTextTableViewCell: UITableViewCell {
 
     @IBOutlet weak var textNewsView: UIView!
-    @IBOutlet weak var textNewsLabel: UILabel!
+    @IBOutlet weak var textNewsLabel: UILabel!  {
+        didSet {
+            textNewsLabel.isOpaque = true
+            textNewsLabel.backgroundColor = Constants.Colors.appBackgroundColor
+        }
+    }
     
     override func awakeFromNib() {
         super.awakeFromNib()

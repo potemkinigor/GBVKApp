@@ -62,7 +62,7 @@ extension SearchGroupsTableViewController: UISearchBarDelegate {
         DispatchQueue.global(qos: .background).async {
             self.networkManager.loadFilteredGroups(filterText: searchText) { (listOfGroups) in
                 
-                listOfGroups.response?.items?.forEach({ (group) in
+                listOfGroups.response.items.forEach({ (group) in
                     
                     let id = group.id!
                     let name = group.name!

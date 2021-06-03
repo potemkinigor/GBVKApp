@@ -150,7 +150,9 @@
                     </view>
                     <connections>
                         <outlet property="enterButton" destination="jXw-dq-yO7" id="hK3-2S-gia"/>
+                        <outlet property="loginLabel" destination="4XS-kW-509" id="h1W-3z-Vbi"/>
                         <outlet property="loginTextField" destination="7ME-C1-NcE" id="1dT-9X-aHI"/>
+                        <outlet property="passwordLabel" destination="Fuj-zZ-Kez" id="bzP-SA-hFS"/>
                         <outlet property="passwordTextField" destination="ZGh-vQ-hLf" id="xaa-XQ-vWU"/>
                         <outlet property="registerButton" destination="AJQ-Pm-y9O" id="oV5-Or-6Mq"/>
                         <outlet property="scrollView" destination="Rq5-Kc-o0w" id="qhS-IM-Hr0"/>
@@ -234,7 +236,7 @@
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Qd3-EG-R6j">
                                                     <rect key="frame" x="0.0" y="0.0" width="414" height="90"/>
                                                     <subviews>
-                                                        <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="NPv-3A-D6a">
+                                                        <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" userInteractionEnabled="NO" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="NPv-3A-D6a">
                                                             <rect key="frame" x="0.0" y="0.0" width="414" height="90"/>
                                                             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                             <constraints>
@@ -305,7 +307,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="414" height="59"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yIp-Nd-gQw">
+                                                <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yIp-Nd-gQw">
                                                     <rect key="frame" x="0.0" y="0.0" width="414" height="59"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bSG-FC-oTr">
@@ -339,7 +341,7 @@
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="NewsLikesCommentsTableViewCell" id="N2B-iI-3z5" customClass="NewsLikesCommentsTableViewCell" customModule="VKApp" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="173.5" width="414" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="N2B-iI-3z5" id="p7f-7R-XPy">
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" userInteractionEnabled="NO" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="N2B-iI-3z5" id="p7f-7R-XPy">
                                             <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>

@@ -150,7 +150,9 @@
                     </view>
                     <connections>
                         <outlet property="enterButton" destination="jXw-dq-yO7" id="hK3-2S-gia"/>
+                        <outlet property="loginLabel" destination="4XS-kW-509" id="h1W-3z-Vbi"/>
                         <outlet property="loginTextField" destination="7ME-C1-NcE" id="1dT-9X-aHI"/>
+                        <outlet property="passwordLabel" destination="Fuj-zZ-Kez" id="bzP-SA-hFS"/>
                         <outlet property="passwordTextField" destination="ZGh-vQ-hLf" id="xaa-XQ-vWU"/>
                         <outlet property="registerButton" destination="AJQ-Pm-y9O" id="oV5-Or-6Mq"/>
                         <outlet property="scrollView" destination="Rq5-Kc-o0w" id="qhS-IM-Hr0"/>

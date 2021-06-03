@@ -9,7 +9,19 @@ import UIKit
 
 class LoginViewController: UIViewController {
 
+    @IBOutlet weak var loginLabel: UILabel! {
+        didSet {
+            loginLabel.isOpaque = true
+            loginLabel.backgroundColor = Constants.Colors.appBackgroundColor
+        }
+    }
     @IBOutlet var loginTextField: UITextField!
+    @IBOutlet weak var passwordLabel: UILabel!  {
+        didSet {
+            passwordLabel.isOpaque = true
+            passwordLabel.backgroundColor = Constants.Colors.appBackgroundColor
+        }
+    }
     @IBOutlet var passwordTextField: UITextField!
     @IBOutlet var enterButton: UIButton!
     @IBOutlet var registerButton: UIButton!

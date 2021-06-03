@@ -9,7 +9,12 @@ import UIKit
 
 class GroupsTableViewCell: UITableViewCell {
 
-    @IBOutlet weak var groupNameLabel: UILabel!
+    @IBOutlet weak var groupNameLabel: UILabel! {
+        didSet {
+            groupNameLabel.isOpaque = true
+            groupNameLabel.backgroundColor = Constants.Colors.appBackgroundColor
+        }
+    }
     @IBOutlet weak var groupsAvatarView: GroupsAvatarView!
     
     
